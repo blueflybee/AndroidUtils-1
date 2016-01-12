@@ -6,3 +6,4 @@
 /captures
 .idea
 gradle.properties
+bintray.gradle
