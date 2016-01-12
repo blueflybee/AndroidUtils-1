@@ -11,6 +11,8 @@ import java.io.IOException;
  * Email: changjiashuai@gmail.com
  *
  * Created by CJS on 16/1/12 12:03.
+ *
+ * request: android.permission.WRITE_EXTERNAL_STORAGE
  */
 public class StorageUtils {
 
