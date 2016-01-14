@@ -25,11 +25,11 @@ public class StorageUtils {
      *         [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache]
      * @throws IOException
      */
-    public static File getCacheDirectory(Context context) throws IOException {
+    public static File getCacheDirectory(Context context) {
         return getCacheDirectory(context, true);
     }
 
-    public static File getCacheDirectory(Context context, boolean external) throws IOException {
+    public static File getCacheDirectory(Context context, boolean external) {
         File appCacheDir = null;
         String externalStorageState = Environment.getExternalStorageState();
         if (external && Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
@@ -45,14 +45,18 @@ public class StorageUtils {
         return appCacheDir;
     }
 
-    public static File getExternalCacheDir(Context context) throws IOException {
+    public static File getExternalCacheDir(Context context) {
         File dataDir = new File(new File(Environment.getExternalStorageDirectory(), "Android"), "data");
         File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");
         if (!appCacheDir.exists()) {
             if (!appCacheDir.mkdirs()) {
                 return null;
             }
-            new File(appCacheDir, ".nomedia").createNewFile();
+            try {
+                new File(appCacheDir, ".nomedia").createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return appCacheDir;
     }
@@ -63,7 +67,7 @@ public class StorageUtils {
      * @return individual application cache directory
      * @throws IOException
      */
-    public static File getIndividualCacheDirectory(Context context) throws IOException {
+    public static File getIndividualCacheDirectory(Context context) {
         return getIndividualCacheDirectory(context, INDIVIDUAL_DIR_NAME);
     }
 
@@ -74,8 +78,9 @@ public class StorageUtils {
      * @return [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache/image]
      * @throws IOException
      */
-    public static File getIndividualCacheDirectory(Context context, String cacheDir) throws IOException {
-        File appCacheDir = getCacheDirectory(context);
+    public static File getIndividualCacheDirectory(Context context, String cacheDir) {
+        File appCacheDir = null;
+        appCacheDir = getCacheDirectory(context);
         File individualCacheDir = new File(appCacheDir, cacheDir);
         if (!individualCacheDir.exists()){
             if (!individualCacheDir.mkdir()){
