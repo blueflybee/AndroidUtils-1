@@ -2,9 +2,12 @@ package com.cjs.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.os.StatFs;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Email: changjiashuai@gmail.com
@@ -18,12 +21,8 @@ public class StorageUtils {
     private static final String INDIVIDUAL_DIR_NAME = "cache";
 
     /**
-     *
-     * @param context
-     * @return application cache directory.
-     *         Cache directory will be created on SD card "/Android/data/[app_package_name]/cache"
-     *         [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache]
-     * @throws IOException
+     * @return application cache directory. Cache directory will be created on SD card
+     * "/Android/data/[app_package_name]/cache" [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache]
      */
     public static File getCacheDirectory(Context context) {
         return getCacheDirectory(context, true);
@@ -35,10 +34,10 @@ public class StorageUtils {
         if (external && Environment.MEDIA_MOUNTED.equals(externalStorageState)) {
             appCacheDir = getExternalCacheDir(context);
         }
-        if (appCacheDir==null){
+        if (appCacheDir == null) {
             appCacheDir = context.getCacheDir();
         }
-        if (appCacheDir==null){
+        if (appCacheDir == null) {
             String cacheDirPath = "/data/data/" + context.getPackageName() + "/cache/";
             appCacheDir = new File(cacheDirPath);
         }
@@ -62,28 +61,22 @@ public class StorageUtils {
     }
 
     /**
-     *
-     * @param context
      * @return individual application cache directory
-     * @throws IOException
      */
     public static File getIndividualCacheDirectory(Context context) {
         return getIndividualCacheDirectory(context, INDIVIDUAL_DIR_NAME);
     }
 
     /**
-     *
-     * @param context
-     * @param cacheDir  "image"
+     * @param cacheDir "image"
      * @return [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache/image]
-     * @throws IOException
      */
     public static File getIndividualCacheDirectory(Context context, String cacheDir) {
         File appCacheDir = null;
         appCacheDir = getCacheDirectory(context);
         File individualCacheDir = new File(appCacheDir, cacheDir);
-        if (!individualCacheDir.exists()){
-            if (!individualCacheDir.mkdir()){
+        if (!individualCacheDir.exists()) {
+            if (!individualCacheDir.mkdir()) {
                 individualCacheDir = appCacheDir;
             }
         }
@@ -91,9 +84,6 @@ public class StorageUtils {
     }
 
     /**
-     *
-     * @param context
-     * @param cacheDir
      * @return specified application cache directory.
      */
     public static File getOwnCacheDirectory(Context context, String cacheDir) {
@@ -101,10 +91,7 @@ public class StorageUtils {
     }
 
     /**
-     *
-     * @param context
      * @param cacheDir "AppName"--- It seems not work??
-     * @param external
      * @return [e.g:/data/data/com.cjs.androidutils/cache]
      */
     public static File getOwnCacheDirectory(Context context, String cacheDir, boolean external) {
@@ -116,5 +103,61 @@ public class StorageUtils {
             appCacheDir = context.getCacheDir();
         }
         return appCacheDir;
+    }
+
+    /**
+     * 判断SDCard是否可用
+     */
+    public static boolean existSDCard() {
+        return Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED);
+    }
+
+    /**
+     * 获取可用空间大小
+     */
+    public static long getAvailaleSize() {
+        if (!existSDCard()) {
+            return 0l;
+        }
+        File path = Environment.getExternalStorageDirectory(); //取得sdcard文件路径
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getAvailableBlocks();
+        return availableBlocks * blockSize;
+    }
+
+    /**
+     * 获取SD大小
+     */
+    public static long getAllSize() {
+        if (!existSDCard()) {
+            return 0l;
+        }
+        File path = Environment.getExternalStorageDirectory();
+        StatFs stat = new StatFs(path.getPath());
+        long blockSize = stat.getBlockSize();
+        long availableBlocks = stat.getBlockCount();
+        return availableBlocks * blockSize;
+    }
+
+    /**
+     * 多个SD卡时 取外置SD卡
+     */
+    public static String getExternalStorageDirectory() {
+        // 参考文章
+        // http://blog.csdn.net/bbmiku/article/details/7937745
+        Map<String, String> map = System.getenv();
+        Log.i("TAG", "map=" + map);
+        String[] values = new String[map.values().size()];
+        map.values().toArray(values);
+        String path = values[values.length - 1];
+        if (path.startsWith("/mnt/") && !Environment.getExternalStorageDirectory()
+                .getAbsolutePath()
+                .equals(path)) {
+            return path;
+        } else {
+            return null;
+        }
     }
 }
