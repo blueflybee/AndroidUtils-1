@@ -30,6 +30,10 @@ public class ExternalStorageUtils {
         return false;
     }
 
+    /**
+     *
+     * @return [e.g.:/storage/emulated/0/]
+     */
     public static String getSdCardPath() {
         return Environment.getExternalStorageDirectory().getPath() + "/";
     }
@@ -47,6 +51,7 @@ public class ExternalStorageUtils {
 
     /**
      * @return A map of all storage locations available
+     *         [e.g.:{sdCard=/mnt/sdcard}]
      */
     public static Map<String, File> getAllStorageLocations() {
         Map<String, File> map = new HashMap<String, File>(10);

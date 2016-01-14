@@ -1,7 +1,6 @@
 package com.cjs.utils;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Environment;
 
 import java.io.File;
@@ -16,7 +15,6 @@ import java.io.IOException;
  */
 public class StorageUtils {
 
-    private static final String EXTERNAL_STORAGE_PERMISSION = "android.permission.WRITE_EXTERNAL_STORAGE";
     private static final String INDIVIDUAL_DIR_NAME = "cache";
 
     /**
@@ -24,6 +22,7 @@ public class StorageUtils {
      * @param context
      * @return application cache directory.
      *         Cache directory will be created on SD card "/Android/data/[app_package_name]/cache"
+     *         [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache]
      * @throws IOException
      */
     public static File getCacheDirectory(Context context) throws IOException {
@@ -68,6 +67,13 @@ public class StorageUtils {
         return getIndividualCacheDirectory(context, INDIVIDUAL_DIR_NAME);
     }
 
+    /**
+     *
+     * @param context
+     * @param cacheDir  "image"
+     * @return [e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache/image]
+     * @throws IOException
+     */
     public static File getIndividualCacheDirectory(Context context, String cacheDir) throws IOException {
         File appCacheDir = getCacheDirectory(context);
         File individualCacheDir = new File(appCacheDir, cacheDir);
@@ -89,19 +95,21 @@ public class StorageUtils {
         return getOwnCacheDirectory(context, cacheDir, true);
     }
 
+    /**
+     *
+     * @param context
+     * @param cacheDir "AppName"--- It seems not work??
+     * @param external
+     * @return [e.g:/data/data/com.cjs.androidutils/cache]
+     */
     public static File getOwnCacheDirectory(Context context, String cacheDir, boolean external) {
         File appCacheDir = null;
-        if (external && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
+        if (external && Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
             appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
         }
         if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
             appCacheDir = context.getCacheDir();
         }
         return appCacheDir;
-    }
-
-    private static boolean hasExternalStoragePermission(Context context) {
-        int permission = context.checkCallingOrSelfPermission(EXTERNAL_STORAGE_PERMISSION);
-        return permission == PackageManager.PERMISSION_GRANTED;
     }
 }
