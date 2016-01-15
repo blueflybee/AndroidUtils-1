@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.cjs.utils.StorageUtils;
+import com.cjs.utils.DeviceUtils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -12,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.i("TAG", "external path:" + StorageUtils.getExternalStorageDirectory());
+        Log.i("TAG", "getLocalIPAddress:" + DeviceUtils.getLocalIPAddress());
+        Log.i("TAG", "getIMEI:" + DeviceUtils.getIMEI(this));
+        Log.i("TAG", "getMac:" + DeviceUtils.getMac(this));
+        Log.i("TAG", "getUDID:" + DeviceUtils.getUDID(this));
     }
 }
