@@ -185,22 +185,6 @@ public class DeviceUtils {
     }
 
     /**
-     * 判断某个应用是否已经安装
-     */
-    public static boolean isAppInstalled(Context context, String packageName) {
-        PackageManager packageManager = context.getPackageManager();
-        // 获取所有已安装程序的包信息
-        List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
-        List<String> packageNames = new ArrayList<>();
-        if (packageInfos != null) {
-            for (int i = 0; i < packageInfos.size(); i++) {
-                packageNames.add(packageInfos.get(i).packageName);
-            }
-        }
-        return packageNames.contains(packageName);
-    }
-
-    /**
      * 获取非系统应用包名
      */
     public static List<String> getAppPackageNameList(Context context) {
