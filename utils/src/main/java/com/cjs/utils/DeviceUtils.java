@@ -1,23 +1,29 @@
 package com.cjs.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -36,9 +42,98 @@ import java.util.List;
 public class DeviceUtils {
 
     /**
-     * 获取状态栏高度＋标题栏(ActionBar)高度
-     * (注意，如果没有ActionBar，那么获取的高度将和上面的是一样的，只有状态栏的高度)
+     * 判断当前设备是否为手机
+     */
+    public static boolean isPhone(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
+    }
+
+    /**
+     * 发送短信
+     */
+    public static void sendSms(Context context, String phoneNumber, String content) {
+        Uri uri = Uri.parse("smsto:" + (TextUtils.isEmpty(phoneNumber) ? "" : phoneNumber));
+        Intent intent = new Intent(Intent.ACTION_SENDTO, uri);
+        intent.putExtra("sms_body", TextUtils.isEmpty(content) ? "" : content);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 跳转至拨号界面
      *
+     * @param phoneNumber 电话号码
+     */
+    public static void callDial(Context context, String phoneNumber) {
+        context.startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phoneNumber)));
+    }
+
+    /**
+     * 拨打电话
+     *
+     * @param phoneNumber 电话号码
+     *
+     *                    request android.permission.CALL_PHONE
+     */
+    public static void callPhone(Context context, String phoneNumber) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        context.startActivity(new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber)));
+    }
+
+    /**
+     * 返回移动终端类型 PHONE_TYPE_NONE :0 手机制式未知 PHONE_TYPE_GSM  :1 手机制式为GSM，移动和联通 PHONE_TYPE_CDMA :2
+     * 手机制式为CDMA，电信 PHONE_TYPE_SIP:3
+     */
+    public static int getPhoneType(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getPhoneType();
+    }
+
+    /**
+     * 主动回到Home，后台运行
+     */
+    public static void goHome(Context context) {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        context.startActivity(intent);
+    }
+
+    /**
+     * 判断输入法是否处于激活状态
+     */
+    public static boolean isActiveSoftInput(Context context) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        return inputMethodManager.isActive();
+    }
+
+    /**
+     * 显示输入法
+     */
+    public static void showInputSoftFromWindowMethod(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    /**
+     * 隐藏键盘
+     */
+    public static void hideInputSoftFromWindowMethod(Context context, View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromInputMethod(view.getWindowToken(), 0);
+    }
+
+    /**
+     * 获取状态栏高度＋标题栏(ActionBar)高度 (注意，如果没有ActionBar，那么获取的高度将和上面的是一样的，只有状态栏的高度)
      */
     public static int getTopBarHeight(Activity activity) {
         return activity.getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
