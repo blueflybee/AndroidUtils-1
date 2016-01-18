@@ -9,7 +9,9 @@ Add this in your root `build.gradle` file (**not** your module `build.gradle` fi
 allprojects {
 	repositories {
 		...
-		maven { url "https://jitpack.io" }
+		 maven {
+                url "http://dl.bintray.com/changjiashuai/maven" 
+         }
 	}
 }
 ```
