@@ -31,8 +31,11 @@ dependencies {
 }
 ```
 
-###ActivityManager
+###Summary
 
+####ActivityManager
+
+```Java
 * addActivity(Activity activity) //添加Activity到堆栈
 * currentActivity() //获取当前Activity（堆栈中最后一个压入的
 * finishActivity() //结束当前Activity（堆栈中最后一个压入的）
@@ -41,8 +44,9 @@ dependencies {
 * finishAllActivity() //结束所有Activity
 * Activity getActivity(String activityName) //根据ActivityName获取堆中Activity实例
 * appExit(Context context) //退出应用程序
+```
 
-###ApkUtils
+####ApkUtils
 
 * String getChannelFromApk(Context context, String channelKey) //从apk中获取Meta-Data信息
 * boolean isAppInstalled(Context context, String packageName) //判断某个应用是否已经安装
