@@ -23,13 +23,13 @@ import java.util.zip.ZipFile;
 public class ApkUtils {
 
     /**
-     * 从apk中获取版本信息
+     * 从apk中获取Meta-Data信息
      */
-    public static String getChannelFromApk(Context context, String channelPrefix) {
+    public static String getChannelFromApk(Context context, String channelKey) {
         ApplicationInfo applicationInfo = context.getApplicationInfo();
         String sourceDir = applicationInfo.sourceDir;
         //默认放在meta-inf/里,需要拼接一下
-        String key = "META-INF/" + channelPrefix;
+        String key = "META-INF/" + channelKey;
         String ret = "";
         ZipFile zipFile = null;
         try {
@@ -54,7 +54,7 @@ public class ApkUtils {
                 }
             }
         }
-        String[] split = ret.split(channelPrefix);
+        String[] split = ret.split(channelKey);
         String channel = "";
         if (split.length >= 2) {
             channel = ret.substring(key.length());

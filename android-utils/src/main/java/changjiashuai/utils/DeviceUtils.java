@@ -117,7 +117,7 @@ public class DeviceUtils {
     }
 
     /**
-     * 显示输入法
+     * 显示键盘
      */
     public static void showInputSoftFromWindowMethod(Context context, View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
