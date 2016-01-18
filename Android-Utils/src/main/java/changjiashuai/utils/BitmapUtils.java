@@ -1,4 +1,4 @@
-package com.cjs.utils;
+package changjiashuai.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -1,4 +1,4 @@
-package com.cjs.utils;
+package changjiashuai.utils;
 
 /**
  * Email: changjiashuai@gmail.com

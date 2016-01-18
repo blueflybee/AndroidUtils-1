@@ -4,7 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.cjs.utils.ApkUtils;
+import changjiashuai.utils.ApkUtils;
+
 
 public class MainActivity extends AppCompatActivity {
 

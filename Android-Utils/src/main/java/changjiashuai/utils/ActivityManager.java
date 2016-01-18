@@ -1,4 +1,4 @@
-package com.cjs.utils;
+package changjiashuai.utils;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.cjs.utils;
+package changjiashuai.utils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
