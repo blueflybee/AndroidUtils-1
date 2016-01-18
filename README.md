@@ -3,7 +3,7 @@
 
 ### Repository
 
-Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
+>Add this in your root `build.gradle` file (**not** your module `build.gradle` file):
 
 ``` Gradle
 allprojects {
@@ -18,7 +18,7 @@ allprojects {
 
 ### Dependency
 
-Add this to your module's `build.gradle` file:
+>Add this to your module's `build.gradle` file:
 
 ```Gradle
 dependencies {
@@ -48,13 +48,16 @@ dependencies {
 
 ####ApkUtils
 
+```Java
 * String getChannelFromApk(Context context, String channelKey) //从apk中获取Meta-Data信息
 * boolean isAppInstalled(Context context, String packageName) //判断某个应用是否已经安装
 * uninstall(Context context, String packageName) //卸载一个app
 * install(Context context, File uriFile) //安装一个apk文件
+```
 
-###BitmapUtils
+####BitmapUtils
 
+```Java
 * Drawable bitmapToDrawable(Bitmap bitmap) //Bitmap转换为Drawable
 * Bitmap drawableToBitmap(Drawable drawable) //Drawable转换为Bitmap
 * String bitmapToString(Bitmap bitmap) //Bitmap转换为Base64 String
@@ -62,9 +65,11 @@ dependencies {
 * byte[] bitmapToByte(Bitmap bitmap) //Bitmap转换为byte[]
 * Bitmap scaleImage(Bitmap originBitmap, float scaleWidth, float scaleHeight) //
 * ...
+```
 
-###DeviceUtils
+####DeviceUtils
 
+```Java
 * boolean isPhone(Context context) //判断当前设备是否为手机
 * sendSms(Context context, String phoneNumber, String content) //发送短信
 * callDial(Context context, String phoneNumber) //跳转至拨号界面
@@ -92,7 +97,8 @@ dependencies {
 * boolean isProcessRunning(Context context, String processName) //进程是否运行
 * boolean isServiceRunning(Context context, String className) //服务是否运行
 * String getLocalIPAddress() //获取本机IP地址
+```
 
-###ExternalStorageUtils
+####ExternalStorageUtils
 
 
