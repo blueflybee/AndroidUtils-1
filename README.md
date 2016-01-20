@@ -26,7 +26,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     ...
-    compile 'changjiashuai.utils:android-utils:0.0.3'
+    compile 'io.github.changjiashuai.utils:android-utils:0.0.3'
     ...
 }
 ```
