@@ -645,7 +645,7 @@ public class FileUtils {
     }
 
     /**
-     * 获取指定文件夹
+     * 获取指定文件夹大小
      */
     public static long getFileSizes(File f) throws Exception {
         long size = 0;

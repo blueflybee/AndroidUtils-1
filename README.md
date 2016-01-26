@@ -10,7 +10,7 @@ allprojects {
 	repositories {
 		...
 		 maven {
-                url "http://dl.bintray.com/changjiashuai/maven" 
+                url "http://dl.bintray.com/changjiashuai/maven"
          }
 	}
 }
@@ -31,7 +31,8 @@ dependencies {
 }
 ```
 
-###Summary
+
+##Summary
 
 ####ActivityManager
 
@@ -74,11 +75,11 @@ dependencies {
 * sendSms(Context context, String phoneNumber, String content) //发送短信
 * callDial(Context context, String phoneNumber) //跳转至拨号界面
 * callPhone(Context context, String phoneNumber) //拨打电话 *request android.permission.CALL_PHONE* self check permission
-* int getPhoneType(Context context) //返回移动终端类型 
-    1. PHONE_TYPE_NONE :0 手机制式未知 
-    2. PHONE_TYPE_GSM  :1 手机制式为GSM，移动和联通 
-    3. PHONE_TYPE_CDMA :2
-    4. 手机制式为CDMA，电信 PHONE_TYPE_SIP:3
+* int getPhoneType(Context context) //返回移动终端类型
+    1. PHONE_TYPE_NONE :0 手机制式未知
+    2. PHONE_TYPE_GSM  :1 手机制式为GSM，移动和联通
+    3. PHONE_TYPE_CDMA :2 手机制式为CDMA，电信
+		4. PHONE_TYPE_SIP  :3
 * goHome(Context context) //主动回到Home，后台运行
 * boolean isActiveSoftInput(Context context) //判断输入法是否处于激活状态
 * showInputSoftFromWindowMethod(Context context, View view) //显示键盘
@@ -101,4 +102,132 @@ dependencies {
 
 ####ExternalStorageUtils
 
+```Java
+* boolean isAvailable() //判断sdCard是否可用
+* String getSdCardPath()//获取sdcard路径 e.g.:/storage/emulated/0/
+* boolean isWritable() //判断sdcard是否可写
+* Map<String, File> getAllStorageLocations() //获取所有存储路径 [e.g.:{sdCard=/mnt/sdcard}]
+```
 
+####FileUtils
+
+>Read or write file
+
+```Java
+* readFile(String, String) read file
+* readFileToList(String, String) read file to string list
+* writeFile(String, String, boolean) write file from String
+* writeFile(String, String) write file from String
+* writeFile(String, List, boolean) write file from String List
+* writeFile(String, List) write file from String List
+* writeFile(String, InputStream) write file
+* writeFile(String, InputStream, boolean) write file
+* writeFile(File, InputStream) write file
+* writeFile(File, InputStream, boolean) write file
+```
+
+>Operate file
+
+```Java
+* moveFile(File, File)
+* moveFile(String, String)
+* copyFile(String, String)
+* getFileExtension(String)
+* getFileName(String)
+* getFileNameWithoutExtension(String)
+* getFileSize(String)
+* deleteFile(String)
+* isFileExist(String)
+* isFolderExist(String)
+* makeFolders(String)
+* makeDirs(String)
+*
+* long getFileSize(String path)
+* String getUrlFileName(String url)
+* String getUrlFileBaseName(String url)
+* String getUrlFileExtension(String url)
+* String getFileBaseName(String filename)
+* String showFileSize(long size)
+* boolean createIfNoExists(String path)
+* long getFileSizes(File f) throws Exception
+```
+
+####ManifestUtils
+
+```Java
+* int getVersionCode(Context context)
+* String getVersionName(Context context)
+* String getMetaData(Context context, String metaKey)
+* String getChannel(Context context, String channelKey)
+```
+
+####NetworkUtils
+
+```Java
+* int getNetworkType(Context context) //判断手机连接的网络类型(wifi,2G,3G,4G) 
+    1. 联通的3G为UMTS或HSDPA，
+    2. 移动和联通的2G为GPRS或EGDE，
+    3. 电信的2G为CDMA，
+    4. 电信的3G为EVDO
+```
+
+####PackageUtils
+
+```Java
+* String getPackageName(Context context)
+* PackageInfo getPackageInfo(Context context, String packageName)
+* String getJarSignature(String filePath) throws Exception
+* byte[] getPKBytes(PublicKey pk) //根据公钥获取key
+* int hashCode(String str) //计算签名时的hashcode算法
+* String getInstalledPackageSignature(Context context, String packageName) //通过包名读取已安装APP数字签名
+* Resources getAPKResources(Context context, String apkPath) //获取指定路径的apk的资源
+```
+
+####ResourceUtils
+
+```Java
+* int getLayoutId(Context context, String resName) //获取 layout 布局文件
+* int getStringId(Context context, String resName) //获取 string 值
+* int getDrawableId(Context context, String resName) //获取 drawable
+* int getMipmapId(Context context, String resName) //获取 mipmap
+* int getStyleId(Context context, String resName) //获取 style
+* Object getStyleableId(Context context, String resName) //获取 styleable
+* int getAnimId(Context context, String resName) //获取 anim
+* int getId(Context context, String resName) //获取 id
+* int getColorId(Context context, String resName) //color
+```
+
+####ShellUtils
+
+```Java
+* boolean checkRootPermission()
+* CommandResult execCommand(String command, boolean isRoot)
+* CommandResult execCommand(String command, boolean isRoot, boolean isNeedResultMessage)
+* CommandResult execCommand(List<String> commands, boolean isRoot)
+* ......
+```
+
+####StorageUtils
+
+```Java
+* File getCacheDirectory(Context context) //[e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache]
+* File getExternalCacheDir(Context context)
+* File getIndividualCacheDirectory(Context context)
+* File getIndividualCacheDirectory(Context context, String cacheDir) //[e.g.:/storage/emulated/0/Android/data/com.cjs.androidutils/cache/image]
+* File getOwnCacheDirectory(Context context, String cacheDir) //[e.g:/data/data/com.cjs.androidutils/cache]
+* boolean existSDCard()
+* long getAvailaleSize() //获取可用空间大小
+* long getAllSize() //获取SD大小
+* String getExternalStorageDirectory() //多个SD卡时 取外置SD卡
+```
+
+####StringUtils
+
+```Java
+* boolean isBlank(String str)
+* boolean isEmpty(String str)
+* int length(CharSequence str)
+* String nullStrToEmpty(Object str)
+* String getHrefInnerHtml(String href)
+* String htmlEscapeCharsToString(String source)
+```
