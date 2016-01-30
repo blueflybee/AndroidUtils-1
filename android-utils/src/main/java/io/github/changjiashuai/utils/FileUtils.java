@@ -7,43 +7,32 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <ul>
- *      Read or write file
- *      <li>{@link #readFile(String, String)} read file</li>
- *      <li>{@link #readFileToList(String, String)} read file to string list</li>
- *      <li>{@link #writeFile(String, String, boolean)} write file from String</li>
- *      <li>{@link #writeFile(String, String)} write file from String</li>
- *      <li>{@link #writeFile(String, List, boolean)} write file from String List</li>
- *      <li>{@link #writeFile(String, List)} write file from String List</li>
- *      <li>{@link #writeFile(String, InputStream)} write file</li>
- *      <li>{@link #writeFile(String, InputStream, boolean)} write file</li>
- *      <li>{@link #writeFile(File, InputStream)} write file</li>
- *      <li>{@link #writeFile(File, InputStream, boolean)} write file</li>
- *      </ul>
+ * <ul> Read or write file <li>{@link #readFile(String, String)} read file</li> <li>{@link
+ * #readFileToList(String, String)} read file to string list</li> <li>{@link #writeFile(String,
+ * String, boolean)} write file from String</li> <li>{@link #writeFile(String, String)} write file
+ * from String</li> <li>{@link #writeFile(String, List, boolean)} write file from String List</li>
+ * <li>{@link #writeFile(String, List)} write file from String List</li> <li>{@link
+ * #writeFile(String, InputStream)} write file</li> <li>{@link #writeFile(String, InputStream,
+ * boolean)} write file</li> <li>{@link #writeFile(File, InputStream)} write file</li> <li>{@link
+ * #writeFile(File, InputStream, boolean)} write file</li> </ul>
  *
- * <ul>
- *     Operate file
- *     <li>{@link #moveFile(File, File)} or {@link #moveFile(String, String)}</li>
- *     <li>{@link #copyFile(String, String)}</li>
- *     <li>{@link #getFileExtension(String)}</li>
- *     <li>{@link #getFileName(String)}</li>
- *     <li>{@link #getFileNameWithoutExtension(String)}</li>
- *     <li>{@link #getFileSize(String)}</li>
- *     <li>{@link #deleteFile(String)}</li>
- *     <li>{@link #isFileExist(String)}</li>
- *     <li>{@link #isFolderExist(String)}</li>
- *     <li>{@link #makeFolders(String)}</li>
- *     <li>{@link #makeDirs(String)}</li>
- * </ul>
+ * <ul> Operate file <li>{@link #moveFile(File, File)} or {@link #moveFile(String, String)}</li>
+ * <li>{@link #copyFile(String, String)}</li> <li>{@link #getFileExtension(String)}</li> <li>{@link
+ * #getFileName(String)}</li> <li>{@link #getFileNameWithoutExtension(String)}</li> <li>{@link
+ * #getFileSize(String)}</li> <li>{@link #deleteFile(String)}</li> <li>{@link
+ * #isFileExist(String)}</li> <li>{@link #isFolderExist(String)}</li> <li>{@link
+ * #makeFolders(String)}</li> <li>{@link #makeDirs(String)}</li> </ul>
  *
  * Email: changjiashuai@gmail.com
  *
@@ -57,6 +46,62 @@ public class FileUtils {
 
     private FileUtils() {
         throw new AssertionError();
+    }
+
+    /***
+     * 获取文件扩展名
+     *
+     * @return 返回文件扩展名
+     */
+    public static String getExtensionName(String filename) {
+        if ((filename != null) && (filename.length() > 0)) {
+            int dot = filename.lastIndexOf('.');
+            if ((dot > -1) && (dot < (filename.length() - 1))) {
+                return filename.substring(dot + 1);
+            }
+        }
+        return filename;
+    }
+
+    public static void fileChannelCopy(File s, File t) {
+        FileInputStream fi = null;
+        FileOutputStream fo = null;
+        try {
+            fi = new FileInputStream(s);
+            fo = new FileOutputStream(t);
+            FileChannel in = fi.getChannel();//得到对应的文件通道
+            FileChannel out = fo.getChannel();//得到对应的文件通道
+            in.transferTo(0, in.size(), out);//连接两个通道，并且从in通道读取，然后写入out通道
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fo != null) fo.close();
+                if (fi != null) fi.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    /**
+     * 读取指定文件的输出
+     */
+    public static String getFileOutputString(String path) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(path), 8192);
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                sb.append("\n").append(line);
+            }
+            bufferedReader.close();
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
